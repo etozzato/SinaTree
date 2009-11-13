@@ -18,7 +18,7 @@
 # config/
 # database.yml
 # db/
-#  migrate
+#  migrate/
 # models/
 #  models.rb
 # public/
@@ -27,7 +27,7 @@
 # = Example
 # ruby ./SinaTree/generate.rb myapplication git heroku
 #
-# Creating Sinatra Application rails-it.com...
+# Creating Sinatra Application myapplication...
 # Creating Sinatra Dir...
 # Creating Sinatra Tree...
 # Creating Sinatra Files...

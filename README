@@ -1,0 +1,51 @@
+Author:  Emanuele Tozzato (mailto:etozzato@gmail.com)
+
+= Description
+Nothing serious here: Just a simple ruby script written in a gray morning to generate a SINATRA application with a basic tree (the way I like it), 
+with an automatic git setup and heroku deployment. It also shotguns the application for you on 0.0.0.0, opens Safari and sends the project to Textmate. 
+Do I need to TELL YOU that this is 100% tailored for my macBook  and you need some gems for it to work (and today I'm too lazy to add more code..) ?
+THANKS! :)
+
+gem required: sinatra, shotgun, heroku
+also required: TextMate, Safari, an account on heroku
+
+= My Application Tree:
+
+Rakefile
+app.rb
+config.ru
+lib.rb
+config/
+database.yml
+db/
+ migrate/
+models/
+ models.rb
+public/
+views/
+
+= Example
+ruby ./SinaTree/generate.rb myapplication git heroku
+
+Creating Sinatra Application myapplication...
+Creating Sinatra Dir...
+Creating Sinatra Tree...
+Creating Sinatra Files...
+Counting objects: 10, done.
+Compressing objects: 100% (8/8), done.
+Writing objects: 100% (10/10), 1.65 KiB, done.
+Total 10 (delta 0), reused 0 (delta 0)
+
+-----> Heroku receiving push
+-----> Sinatra app detected
+      Compiled slug size is 4K
+-----> Launching......... done
+      http://morning-stone-40.heroku.com deployed to Heroku
+
+To git@heroku.com:morning-stone-40.git
+* [new branch]      master -> master
+Sending to TextMate
+Starting application on port 3030..
+Sending to Safari
+
+E/T +searchintegrate.com +mekdigital.com +trueinteractive.net

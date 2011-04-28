@@ -70,15 +70,15 @@ get "/" do
 end'
 
 config_ru = 'require "rubygems"
-require "sinatra"
+require "bundler"
 
-set :environment, :production
-set :root, File.dirname(__FILE__)
-set :run, false
+Bundler.require
 
-set :app_file, __FILE__
+set :views, File.dirname(__FILE__) + "/views"
+set :public, File.dirname(__FILE__) + "/public"
+set :raise_errors, false
 
-require "app.rb"
+require "./app"
 run Sinatra::Application'
 
 rakefile = 'require "rubygems"
@@ -139,6 +139,15 @@ models_rb = '[].each do |model|
   require "./models/#{model}.rb"
 end'
 
+gemfile = 'source :rubygems
+gem "sinatra"
+gem "json"
+gem "libxml-ruby"
+gem "activerecord"
+gem "mysql2"
+gem "mysqlplus"
+'
+
 database_yml = 'development:
   adapter: mysql
   encoding: utf8
@@ -150,6 +159,7 @@ database_yml = 'development:
 
 unless ARGV[0]
   raise StandardError.new('Usage: ruby ./sinatra.rb APP_NAME')
+  raise StandardError.new('Error: Plese intall Bundler (gem install bundler)') unless `gem search bundler` =~ 'bundler'
 else
   name = ARGV[0]
   puts "Creating Sinatra Application #{name}..."
@@ -158,14 +168,14 @@ else
     puts "Creating Sinatra Dir..."
     `cd #{name} && mkdir models && mkdir public && mkdir views && mkdir db && mkdir db/migrate && mkdir config`
     puts "Creating Sinatra Tree..."
-    `cd #{name} && echo '#{app_rb}' >> app.rb && echo '#{config_ru}' >> config.ru && echo '#{rakefile.gsub('APP_NAME', name + '_db')}' >> Rakefile && echo '#{lib_rb}' >> lib.rb && echo '#{models_rb}' >> models/models.rb && echo '#{database_yml.gsub('APP_NAME', name + '_db')}' >> database.yml`
+    `cd #{name} && echo '#{app_rb}' >> app.rb && echo '#{config_ru}' >> config.ru && echo '#{rakefile.gsub('APP_NAME', name + '_db')}' >> Rakefile && echo '#{lib_rb}' >> lib.rb && echo '#{models_rb}' >> models/models.rb && echo '#{database_yml.gsub('APP_NAME', name + '_db')}' >> database.yml && echo '#{gemfile}' >> Gemfile && bundle install`
     puts "Creating Sinatra Files..."
     
     if ARGV.include?('git')
       `cd #{name} && git init && git add . && git commit -a -m 'my first commit'`
       
       if ARGV.include?('heroku')
-        `cd #{name} && heroku create && git push heroku master`
+        `cd #{name} && heroku create #{name} --stack bamboo-mri-1.9.2 && git push heroku master`
       end
     end
     
